@@ -30,7 +30,6 @@ normPDF <- function(x, mu = 0, sigma = 1){
 #' @param sigma std. dev. of distribution
 #'
 tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
-  print(x)
   y <- normPDF(x, mu, sigma)
   y[x > lBound & x < uBound] <- NA
   return(y)
@@ -41,6 +40,7 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 #' Runs t-test and outputs graph for interpretation
 #'
 #' @import ggplot2
+#' @import stats
 #'
 #' @param group1 continuous data to test
 #' @param group2 optional: second group to include for two sample t-test
@@ -62,17 +62,9 @@ tTest <- function(group1, group2 = NULL, mu = 0){
   fakeData <- data.frame(x = c(-xlimVal, xlimVal, testStat),
                          m = factor(1))
 
-  # ggplot(data = fakeData,
-  #        aes(x = x)) +
-  #   geom_vline(xintercept = c(testStat, -testStat),
-  #              color = c("gold", "black")) +
-  #   geom_area(stat = "function",
-  #             fun = dnorm,
-  #             fill = "blue",
-  #             xlim = (c(-xlimVal, testStat)))
   uBound = abs(testStat)
   lBound = -uBound
-  print(xlimVal)
+
   ggplot(fakeData, aes(x=x)) +
     stat_function(fun = dnorm) +
     stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
@@ -85,10 +77,9 @@ tTest <- function(group1, group2 = NULL, mu = 0){
                   n = 500) +
     geom_vline(xintercept = c(testStat, -testStat),
                color = c("gold", "black"),
-               size = 3)
-
-
-  # if(!is.null(group2)){
-  #
-  # }
+               size = 3) +
+    theme_bw() +
+    labs(x = "Test Statistic",
+         y = "Density",
+         title = "Result of T-Test")
 }
