@@ -66,7 +66,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0){
   uBound = abs(testStat)
   lBound = -uBound
 
-  ggplot2::ggplot(fakeData, aes(x=x)) +
+  ggplot(fakeData, aes(x=x)) +
     stat_function(fun = dnorm) +
     stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
                   mapping = aes(x = x),
