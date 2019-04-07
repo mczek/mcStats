@@ -57,7 +57,6 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, verbose = 1){
   mu1 <- mean(group1)
   sigma1 <- sd(group1)
   testResult <- t.test(group1, group2, mu = mu)
-  print(testResult)
   testStat <- testResult$statistic
 
   xlimVal <- max(abs(testStat) + 1, 3)
