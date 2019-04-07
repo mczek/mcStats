@@ -1,6 +1,6 @@
 #' @title Boostrap
 #' @description Boostrap using given data and statistic
-#' @param fun function to calculate on each sample
+#' @param fun function to calculate on each sample. This can be a user-defined function that takes in data as a vector and returns a statistic.
 #' @param data data to use for boostrapping. Should be a respresentative sample
 #' @param nreps number of times to bootstrap
 #' @param verbose default is 1 which will create a graph. To turn this off use verbose = 0.
