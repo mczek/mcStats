@@ -2,7 +2,7 @@
 % Please edit documentation in R/HypothesisTests.R
 \name{tShade}
 \alias{tShade}
-\title{Returns density of t distribution (uses the normal distribution for now) if in shaded region}
+\title{T-Distribution PDF}
 \usage{
 tShade(x, lBound, uBound, mu = 0, sigma = 1)
 }

@@ -1,5 +1,5 @@
-#' Print "hello world!"
-#'
+#' @title Print "hello world!"
+#' @description print "hello world!"
 #' @examples
 #' hello()
 #' @export
@@ -8,8 +8,8 @@ hello <- function(){
   print("hello world!")
 }
 
-#' Returns density of t distribution (uses the normal distribution for now) if in shaded region
-#'
+#' @title Normal Distribution PDF
+#' @description Returns density of t distribution (uses the normal distribution for now) if in shaded region
 #' @param x x value
 #' @param mu mean of distribution
 #' @param sigma std. dev. of distribution
@@ -21,8 +21,8 @@ normPDF <- function(x, mu = 0, sigma = 1){
   return(exp(-(x - mu)^2/2)    /sqrt(2*pi))
 }
 
-#' Returns density of t distribution (uses the normal distribution for now) if in shaded region
-#'
+#' @title T-Distribution PDF
+#' @description Returns density of t distribution (uses the normal distribution for now) if in shaded region
 #' @param x x value
 #' @param lBound x value that should be shaded below
 #' @param uBound x value that should be shaded above
@@ -36,20 +36,20 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 }
 
 
-
-#' Runs t-test and outputs graph for interpretation
-#'
-#' @import ggplot2
-#' @import stats
-#' @import ggthemes
-#'
+#' @title Conduct t-test
+#' @description Runs t-test and outputs graph for interpretation
 #' @param group1 continuous data to test
 #' @param group2 optional: second group to include for two sample t-test
 #' @param mu optional: mean to test against for one-sample t-test
 #' @param verbose default is 1 which will create a graph. To turn this off use verbose = 0.
 #'
+#' @return results of call to t.test
+#'
+#' @import ggplot2 stats ggthemes
+#'
 #' @examples
 #' x <- rnorm(100)
+#' showT.Test(x, verbose = 0)
 #' showT.Test(x)
 #'
 #' @export
@@ -68,7 +68,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, verbose = 1){
   lBound = -uBound
 
   if(verbose > 0){
-    ggplot(fakeData, aes(x=x)) +
+    plt <- ggplot(fakeData, aes(x=x)) +
       stat_function(fun = dnorm) +
       stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
                     mapping = aes(x = x),
@@ -86,5 +86,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, verbose = 1){
       labs(x = "Test Statistic",
            y = "Density",
            title = "Result of T-Test")
+    print(plt)
   }
+  return(testResult)
 }

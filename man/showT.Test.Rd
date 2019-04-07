@@ -2,7 +2,7 @@
 % Please edit documentation in R/HypothesisTests.R
 \name{showT.Test}
 \alias{showT.Test}
-\title{Runs t-test and outputs graph for interpretation}
+\title{Conduct t-test}
 \usage{
 showT.Test(group1, group2 = NULL, mu = 0, verbose = 1)
 }
@@ -15,11 +15,15 @@ showT.Test(group1, group2 = NULL, mu = 0, verbose = 1)
 
 \item{verbose}{default is 1 which will create a graph. To turn this off use verbose = 0.}
 }
+\value{
+results of call to t.test
+}
 \description{
 Runs t-test and outputs graph for interpretation
 }
 \examples{
 x <- rnorm(100)
+showT.Test(x, verbose = 0)
 showT.Test(x)
 
 }

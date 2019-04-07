@@ -1,5 +1,5 @@
-#' Boostrap using given data and statistic
-#'
+#' @title Boostrap
+#' @description Boostrap using given data and statistic
 #' @param fun function to calculate on each sample
 #' @param data data to use for boostrapping. Should be a respresentative sample
 #' @param nreps number of times to bootstrap
@@ -8,9 +8,12 @@
 #' @return results from boostrapping. A vector of length @param nreps containing each statistic calculated
 #' @export
 #'
+#' @import ggplot2 stats ggthemes
+#'
 #' @examples
 #' x <- rnorm(100)
-#' bootstrap(mean, x, 10000)
+#' bootstrap(mean, x, 1000, verbose = 0)
+#' bootstrap(mean, x, 1000)
 bootstrap <- function(fun, data, nreps, verbose = 1){
   results <- NULL
   for(i in 1:nreps){
@@ -22,15 +25,18 @@ bootstrap <- function(fun, data, nreps, verbose = 1){
   fakeData <- data.frame(Rep = results,
                          Mean = meanStat)
 
-  ggplot(data = fakeData,
-         mapping = aes(x = results)) +
-    geom_histogram(bins = 30) +
-    theme_bw() +
-    geom_vline(aes(xintercept = Mean,
-                   color = "Mean")) +
-    scale_color_colorblind() +
-    labs(x = "Statistic",
-         y = "Count",
-         title = paste("Results of Boostrapping", nreps, "Times" ))
+  if(verbose > 0){
+    plt <- ggplot(data = fakeData,
+                  mapping = aes(x = results)) +
+      geom_histogram(bins = 30) +
+      theme_bw() +
+      geom_vline(aes(xintercept = Mean,
+                     color = "Mean")) +
+      scale_color_colorblind() +
+      labs(x = "Statistic",
+           y = "Count",
+           title = paste("Results of Boostrapping", nreps, "Times" ))
+    print(plt)
+  }
   return(results)
 }

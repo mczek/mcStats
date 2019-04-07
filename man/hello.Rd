@@ -7,7 +7,7 @@
 hello()
 }
 \description{
-Print "hello world!"
+print "hello world!"
 }
 \examples{
 hello()

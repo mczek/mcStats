@@ -2,7 +2,7 @@
 % Please edit documentation in R/Bootstrap.R
 \name{bootstrap}
 \alias{bootstrap}
-\title{Boostrap using given data and statistic}
+\title{Boostrap}
 \usage{
 bootstrap(fun, data, nreps, verbose = 1)
 }
@@ -23,5 +23,6 @@ Boostrap using given data and statistic
 }
 \examples{
 x <- rnorm(100)
-bootstrap(mean, x, 10000)
+bootstrap(mean, x, 1000, verbose = 0)
+bootstrap(mean, x, 1000)
 }

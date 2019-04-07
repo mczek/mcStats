@@ -2,7 +2,7 @@
 % Please edit documentation in R/HypothesisTests.R
 \name{normPDF}
 \alias{normPDF}
-\title{Returns density of t distribution (uses the normal distribution for now) if in shaded region}
+\title{Normal Distribution PDF}
 \usage{
 normPDF(x, mu = 0, sigma = 1)
 }
