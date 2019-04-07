@@ -39,9 +39,8 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 
 #' Runs t-test and outputs graph for interpretation
 #'
-#'
-#' @import stats
 #' @import ggplot2
+#' @import stats
 #' @import ggthemes
 #'
 #' @param group1 continuous data to test
@@ -67,7 +66,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0){
   uBound = abs(testStat)
   lBound = -uBound
 
-  ggplot(fakeData, aes(x=x)) +
+  ggplot2::ggplot(fakeData, aes(x=x)) +
     stat_function(fun = dnorm) +
     stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
                   mapping = aes(x = x),
