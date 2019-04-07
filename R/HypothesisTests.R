@@ -81,7 +81,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0){
                    color = Statistic),
                size = 3) +
     scale_color_colorblind() +
-    theme_bw()
+    theme_bw() +
     labs(x = "Test Statistic",
          y = "Density",
          title = "Result of T-Test")
