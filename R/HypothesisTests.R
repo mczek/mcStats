@@ -77,10 +77,6 @@ showT.Test <- function(group1, group2 = NULL, mu = 0){
                   args = list(lBound = lBound,
                               uBound = uBound),
                   n = 500) +
-    geom_vline(xintercept = c(testStat, -testStat),
-               color = c("gold", "black"),
-               size = 3,
-               show_guide = TRUE) +
     geom_vline(aes(xintercept = x,
                    color = Statistic),
                size = 3) +
