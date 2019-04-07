@@ -46,13 +46,14 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 #' @param group1 continuous data to test
 #' @param group2 optional: second group to include for two sample t-test
 #' @param mu optional: mean to test against for one-sample t-test
+#' @param verbose default is 1 which will create a graph. To turn this off use verbose = 0.
 #'
 #' @examples
 #' x <- rnorm(100)
 #' showT.Test(x)
 #'
 #' @export
-showT.Test <- function(group1, group2 = NULL, mu = 0){
+showT.Test <- function(group1, group2 = NULL, mu = 0, verbose = 1){
   mu1 <- mean(group1)
   sigma1 <- sd(group1)
   testResult <- t.test(group1, group2, mu = mu)
@@ -66,22 +67,24 @@ showT.Test <- function(group1, group2 = NULL, mu = 0){
   uBound = abs(testStat)
   lBound = -uBound
 
-  ggplot(fakeData, aes(x=x)) +
-    stat_function(fun = dnorm) +
-    stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
-                  mapping = aes(x = x),
-                  fun = tShade,
-                  geom = "area",
-                  fill = "blue",
-                  args = list(lBound = lBound,
-                              uBound = uBound),
-                  n = 500) +
-    geom_vline(aes(xintercept = x,
-                   color = Statistic),
-               size = 3) +
-    scale_color_colorblind() +
-    theme_bw() +
-    labs(x = "Test Statistic",
-         y = "Density",
-         title = "Result of T-Test")
+  if(verbose > 0){
+    ggplot(fakeData, aes(x=x)) +
+      stat_function(fun = dnorm) +
+      stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
+                    mapping = aes(x = x),
+                    fun = tShade,
+                    geom = "area",
+                    fill = "blue",
+                    args = list(lBound = lBound,
+                                uBound = uBound),
+                    n = 500) +
+      geom_vline(aes(xintercept = x,
+                     color = Statistic),
+                 size = 3) +
+      scale_color_colorblind() +
+      theme_bw() +
+      labs(x = "Test Statistic",
+           y = "Density",
+           title = "Result of T-Test")
+  }
 }

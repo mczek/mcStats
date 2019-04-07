@@ -4,7 +4,7 @@
 \alias{bootstrap}
 \title{Boostrap using given data and statistic}
 \usage{
-bootstrap(fun, data, nreps)
+bootstrap(fun, data, nreps, verbose = 1)
 }
 \arguments{
 \item{fun}{function to calculate on each sample}
@@ -12,11 +12,16 @@ bootstrap(fun, data, nreps)
 \item{data}{data to use for boostrapping. Should be a respresentative sample}
 
 \item{nreps}{number of times to bootstrap}
+
+\item{verbose}{default is 1 which will create a graph. To turn this off use verbose = 0.}
+}
+\value{
+results from boostrapping. A vector of length @param nreps containing each statistic calculated
 }
 \description{
 Boostrap using given data and statistic
 }
 \examples{
 x <- rnorm(100)
-bootstrap(mean, x, 1000)
+bootstrap(mean, x, 10000)
 }

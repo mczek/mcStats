@@ -4,7 +4,7 @@
 \alias{showT.Test}
 \title{Runs t-test and outputs graph for interpretation}
 \usage{
-showT.Test(group1, group2 = NULL, mu = 0)
+showT.Test(group1, group2 = NULL, mu = 0, verbose = 1)
 }
 \arguments{
 \item{group1}{continuous data to test}
@@ -12,6 +12,8 @@ showT.Test(group1, group2 = NULL, mu = 0)
 \item{group2}{optional: second group to include for two sample t-test}
 
 \item{mu}{optional: mean to test against for one-sample t-test}
+
+\item{verbose}{default is 1 which will create a graph. To turn this off use verbose = 0.}
 }
 \description{
 Runs t-test and outputs graph for interpretation
