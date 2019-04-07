@@ -39,8 +39,10 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 
 #' Runs t-test and outputs graph for interpretation
 #'
-#' @import ggplot2
+#'
 #' @import stats
+#' @import ggplot2
+#' @import ggthemes
 #'
 #' @param group1 continuous data to test
 #' @param group2 optional: second group to include for two sample t-test
@@ -48,10 +50,10 @@ tShade <- function(x, lBound, uBound, mu = 0, sigma = 1){
 #'
 #' @examples
 #' x <- rnorm(100)
-#' tTest(x)
+#' showT.Test(x)
 #'
 #' @export
-tTest <- function(group1, group2 = NULL, mu = 0){
+showT.Test <- function(group1, group2 = NULL, mu = 0){
   mu1 <- mean(group1)
   sigma1 <- sd(group1)
   testResult <- t.test(group1, group2, mu = mu)
@@ -59,8 +61,8 @@ tTest <- function(group1, group2 = NULL, mu = 0){
   testStat <- testResult$statistic
 
   xlimVal <- max(abs(testStat) + 1, 3)
-  fakeData <- data.frame(x = c(-xlimVal, xlimVal, testStat),
-                         m = factor(1))
+  fakeData <- data.frame(x = c(-testStat, testStat),
+                         Statistic = c("Equally Extreme Event", "Your Test Statistic"))
 
   uBound = abs(testStat)
   lBound = -uBound
@@ -77,8 +79,13 @@ tTest <- function(group1, group2 = NULL, mu = 0){
                   n = 500) +
     geom_vline(xintercept = c(testStat, -testStat),
                color = c("gold", "black"),
+               size = 3,
+               show_guide = TRUE) +
+    geom_vline(aes(xintercept = x,
+                   color = Statistic),
                size = 3) +
-    theme_bw() +
+    scale_color_colorblind() +
+    theme_bw()
     labs(x = "Test Statistic",
          y = "Density",
          title = "Result of T-Test")

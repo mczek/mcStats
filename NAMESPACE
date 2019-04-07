@@ -2,6 +2,7 @@
 
 export(hello)
 export(normPDF)
-export(tTest)
+export(showT.Test)
 import(ggplot2)
+import(ggthemes)
 import(stats)
