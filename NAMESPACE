@@ -2,9 +2,9 @@
 
 export(bootstrap)
 export(hello)
+export(labelDisPDF)
 export(showT.Test)
-export(showXtremeEvents)
-export(showZ.Test)
+export(showXtremeEventsCts)
 import(ggplot2)
 import(ggthemes)
 import(stats)

@@ -28,7 +28,7 @@ bootstrap <- function(fun, data, nreps, verbose = 1){
   if(verbose > 0){
     plt <- ggplot(data = fakeData,
                   mapping = aes_(x = ~ Rep)) +
-      geom_histogram(bins = 30) +
+      geom_histogram() +
       theme_bw() +
       geom_vline(aes_(xintercept = ~ Mean,
                      color = "Mean")) +
