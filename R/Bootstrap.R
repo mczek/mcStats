@@ -27,10 +27,10 @@ bootstrap <- function(fun, data, nreps, verbose = 1){
 
   if(verbose > 0){
     plt <- ggplot(data = fakeData,
-                  mapping = aes(x = results)) +
+                  mapping = aes_(x = ~ Rep)) +
       geom_histogram(bins = 30) +
       theme_bw() +
-      geom_vline(aes(xintercept = Mean,
+      geom_vline(aes_(xintercept = ~ Mean,
                      color = "Mean")) +
       scale_color_colorblind() +
       labs(x = "Statistic",

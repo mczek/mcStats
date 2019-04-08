@@ -7,7 +7,7 @@
 bootstrap(fun, data, nreps, verbose = 1)
 }
 \arguments{
-\item{fun}{function to calculate on each sample}
+\item{fun}{function to calculate on each sample. This can be a user-defined function that takes in data as a vector and returns a statistic.}
 
 \item{data}{data to use for boostrapping. Should be a respresentative sample}
 

@@ -2,8 +2,9 @@
 
 export(bootstrap)
 export(hello)
-export(normPDF)
 export(showT.Test)
+export(showXtremeEvents)
+export(showZ.Test)
 import(ggplot2)
 import(ggthemes)
 import(stats)
