@@ -4,7 +4,7 @@
 \alias{showXtremeEventsCts}
 \title{Highlight extreme events}
 \usage{
-showXtremeEventsCts(testStat, densFun, degFree, ...)
+showXtremeEventsCts(testStat, densFun, degFree, xlims, ...)
 }
 \arguments{
 \item{testStat}{test statistic}
@@ -12,6 +12,8 @@ showXtremeEventsCts(testStat, densFun, degFree, ...)
 \item{densFun}{function that computes appropriate density}
 
 \item{degFree}{degrees of freedom when only one is needed. This gets passed into densFun}
+
+\item{xlims}{x limits of the graph to be used. This is passed to ggplot}
 
 \item{...}{extra arguments passed to density function}
 }
