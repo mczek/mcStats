@@ -15,10 +15,13 @@ hello <- function(){
 #' @param sd std. dev. of noraml distribution
 #' @param log logical; if TRUE probabilities are given as log(p). See stats::dnorm
 #' @param ... extra parameters which are ignored
+#' @export
 #' @return density of normal distribution
 mcDNorm <- function(x, mean = 0, sd = 1, log = FALSE, ...){
   return(dnorm(x, mean, sd, log))
 }
+
+
 
 
 #' @title Used to shade in a PDF
@@ -28,8 +31,8 @@ mcDNorm <- function(x, mean = 0, sd = 1, log = FALSE, ...){
 #' @param testStat test statistic value
 #' @param x x value
 #' @param ... optional parameters passed to density function
-#'
 #' @return density if outside of extreme event region
+#' @export
 shadePDFCts <- function(x, fun, testStat, ...){
   y <- fun(x,...)
   y[abs(x) < abs(testStat)] <- NA
@@ -42,6 +45,7 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #'
 #' @param testStat test statistic
 #' @param densFun function that computes appropriate density
+#' @param degFree degrees of freedom when only one is needed. This gets passed into densFun
 #' @param ... extra arguments passed to density function
 #'
 #' @return results of call testFun
@@ -54,7 +58,7 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #' showT.Test(x)
 #'
 #' @export
-showXtremeEventsCts <- function(testStat, densFun, ...){
+showXtremeEventsCts <- function(testStat, densFun, degFree, ...){
   # print(...)
   xlimVal <- max(abs(testStat) + 1, 3)
   fakeData <- data.frame(x = c(-testStat, testStat),
@@ -62,7 +66,7 @@ showXtremeEventsCts <- function(testStat, densFun, ...){
   # extraArgs <- ...
   plt <- ggplot(fakeData, aes_(x = ~ x)) +
     stat_function(fun = densFun,
-                  args = list(df = df)) +
+                  args = list(df = degFree)) +
     stat_function(data = data.frame(x = c(-xlimVal, xlimVal)),
                   mapping = aes_(x = ~ x),
                   fun = shadePDFCts,
@@ -70,7 +74,7 @@ showXtremeEventsCts <- function(testStat, densFun, ...){
                   fill = "blue",
                   args = list(fun = densFun,
                               testStat = testStat,
-                              df = df),
+                              df = degFree),
                   n = 500) +
     geom_vline(aes_(xintercept = ~ x,
                     color = ~ Statistic),
@@ -94,7 +98,6 @@ showXtremeEventsCts <- function(testStat, densFun, ...){
 #' @return results of call to t.test
 #'
 #' @import ggplot2 stats ggthemes
-#'
 #' @examples
 #' x <- rnorm(100)
 #' showT.Test(x, verbose = 0)
@@ -104,12 +107,12 @@ showXtremeEventsCts <- function(testStat, densFun, ...){
 showT.Test <- function(group1, group2 = NULL, mu = 0, verbose = 1){
   testResult <- t.test(group1, group2, mu = mu)
   testStat <- testResult$statistic
-  df <- testResult$parameter
+  degFree <- testResult$parameter
 
   if(verbose > 0){
     showXtremeEventsCts(testStat = testStat,
                      densFun = dt,
-                     df = df)
+                     degFree = degFree)
   }
   return(testResult)
 }

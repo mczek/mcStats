@@ -12,3 +12,4 @@ Imports: ggplot2,
     ggthemes,
     magrittr,
     stats
+Suggests: testthat

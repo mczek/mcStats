@@ -3,6 +3,8 @@
 export(bootstrap)
 export(hello)
 export(labelDisPDF)
+export(mcDNorm)
+export(shadePDFCts)
 export(showT.Test)
 export(showXtremeEventsCts)
 import(ggplot2)

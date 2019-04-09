@@ -4,12 +4,14 @@
 \alias{showXtremeEventsCts}
 \title{Highlight extreme events}
 \usage{
-showXtremeEventsCts(testStat, densFun, ...)
+showXtremeEventsCts(testStat, densFun, degFree, ...)
 }
 \arguments{
 \item{testStat}{test statistic}
 
 \item{densFun}{function that computes appropriate density}
+
+\item{degFree}{degrees of freedom when only one is needed. This gets passed into densFun}
 
 \item{...}{extra arguments passed to density function}
 }
