@@ -17,6 +17,17 @@ labelDisPDF <- function(x, obsVal, expVal){
   return(y)
 }
 
+#' Show results of proportion test using \link[stats]{binom.test}
+#'
+#' @param x x value
+#' @param n number of repetitions
+#' @param p probability of success in one Bernoulli trial
+#'
+#' @return output of call to \link[stats]{binom.test}
+#' @export
+#'
+#' @examples
+#' showProp.Test(3, 10)
 showProp.Test <- function(x, n, p = 0.5){
   testResult <- binom.test(x, n, p)
   testStat <- testResult$statistic

@@ -138,7 +138,7 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 
 #' showChiSq.Test(x = c(1,2,1), y= c(1,2,2))
 showChiSq.Test <- function(x, y = NULL, p = rep(1/length(x), length(x)),
                            simulate.p.value = FALSE, nreps = 2000, verbose = 1){
-  testResult <- chisq.test(x, y, p, simulate.p.value, B = nreps)
+  testResult <- chisq.test(x = x, y = y, p = p, simulate.p.value = simulate.p.value, B = nreps)
   testStat <- testResult$statistic
   degFree <- testResult$parameter
   xlims <- c(0, max(qchisq(0.99, degFree), testStat + 1))
