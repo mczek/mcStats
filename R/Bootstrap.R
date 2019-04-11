@@ -14,7 +14,7 @@
 #' x <- rnorm(100)
 #' bootstrap(mean, x, 1000, verbose = 0)
 #' bootstrap(mean, x, 1000)
-bootstrap <- function(fun, data, nreps, verbose = 1){
+bootstrap <- function(fun, data, nreps, conf.level = 0.95, verbose = 1){
   results <- NULL
   for(i in 1:nreps){
     currentSample <- sample(data, replace = TRUE)
@@ -25,6 +25,8 @@ bootstrap <- function(fun, data, nreps, verbose = 1){
   fakeData <- data.frame(Rep = results,
                          Mean = meanStat)
 
+  confLines <- quantile(results, c(conf.level, 1-conf.level))
+
   if(verbose > 0){
     plt <- ggplot(data = fakeData,
                   mapping = aes_(x = ~ Rep)) +
@@ -33,10 +35,14 @@ bootstrap <- function(fun, data, nreps, verbose = 1){
       geom_vline(aes_(xintercept = ~ Mean,
                      color = "Mean")) +
       scale_color_colorblind() +
+      geom_vline(xintercept = confLines,
+                 color = "#56B4E9") +
       labs(x = "Statistic",
            y = "Count",
-           title = paste("Results of Boostrapping", nreps, "Times" ))
+           title = paste("Results of Boostrapping", nreps, "Times with Confidence Lines" ))
+      # geom_vline(xintercept = confLines)
     print(plt)
   }
   return(results)
 }
+
