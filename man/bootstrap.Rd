@@ -4,14 +4,18 @@
 \alias{bootstrap}
 \title{Boostrap}
 \usage{
-bootstrap(fun, data, nreps, verbose = 1)
+bootstrap(fun, data, h0, nreps, conf.level = 0.95, verbose = 1)
 }
 \arguments{
 \item{fun}{function to calculate on each sample. This can be a user-defined function that takes in data as a vector and returns a statistic.}
 
 \item{data}{data to use for boostrapping. Should be a respresentative sample}
 
+\item{h0}{null hypothesis value}
+
 \item{nreps}{number of times to bootstrap}
+
+\item{conf.level}{confidence value}
 
 \item{verbose}{default is 1 which will create a graph. To turn this off use verbose = 0.}
 }
@@ -23,6 +27,6 @@ Boostrap using given data and statistic
 }
 \examples{
 x <- rnorm(100)
-bootstrap(mean, x, 1000, verbose = 0)
-bootstrap(mean, x, 1000)
+bootstrap(mean, x, 0.5, 1000, verbose = 0)
+bootstrap(mean, x, 0.5, 1000)
 }

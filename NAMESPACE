@@ -2,6 +2,7 @@
 
 export(bootstrap)
 export(hello)
+export(labelBootResults)
 export(labelDisPDF)
 export(mcDNorm)
 export(shadePDFCts)
