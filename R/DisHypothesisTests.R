@@ -30,19 +30,37 @@ labelDisPDF <- function(x, obsVal, expVal){
 #' showProp.Test(3, 10)
 showProp.Test <- function(x, n, p = 0.5){
   testResult <- binom.test(x, n, p)
-  testStat <- testResult$statistic
-  pointEstimate <- x/n
-  Diff <- p - x/n
+  obsVal <- testResult$statistic
+  showXtremeEventsDis(obsVal = obsVal,
+                      expVal = n*p,
+                      xVals = 0:n,
+                      probFun = dbinom,
+                      size = n,
+                      prob = p)
 
-  fakeData <- data.frame(x = 0:n,
-                         Probability = dbinom(x = 0:n,
-                                              size = n,
-                                              prob = p),
-                         Event = labelDisPDF(0:n,
-                                             obsVal = x,
-                                             expVal = p*n))
+}
 
-  ggplot(fakeData, aes_(x = ~ x, y = ~ Probability)) +
+#' Show Extreme Events from a Discrete Distribution
+#'
+#' @param obsVal observed x value
+#' @param expVal expected x value
+#' @param xVals domain of x (possible values)
+#' @param probFun probability mass function for the given distribution
+#' @param ... addition arguments passed to probFun
+#'
+#' @return graph coloring events by how extreme they are under the null hypothesis
+#' @export
+#'
+#' @examples
+#' showXtremeEventsDis(3, 5, 0:10, probFun = dbinom, size = 10, prob = 0.5)
+showXtremeEventsDis <- function(obsVal, expVal, xVals, probFun, ...){
+  fakeData <- data.frame(x = xVals,
+                         Probability = probFun(xVals, ...),
+                         Event = labelDisPDF(xVals,
+                                             obsVal,
+                                             expVal))
+
+  plt <- ggplot(fakeData, aes_(x = ~ x, y = ~ Probability)) +
     geom_bar(mapping = aes_(fill = ~ Event),
              stat = "identity",
              color = "black") +
@@ -54,4 +72,8 @@ showProp.Test <- function(x, n, p = 0.5){
     labs(x = "X",
          y = "Probability",
          title = "Results of Proportion Test")
+  print(plt)
+  return(plt)
 }
+
+

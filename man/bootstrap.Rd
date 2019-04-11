@@ -9,7 +9,7 @@ bootstrap(fun, data, h0, nreps, conf.level = 0.95, verbose = 1)
 \arguments{
 \item{fun}{function to calculate on each sample. This can be a user-defined function that takes in data as a vector and returns a statistic.}
 
-\item{data}{data to use for boostrapping. Should be a respresentative sample}
+\item{data}{data to use for bootstrapping. Should be a respresentative sample}
 
 \item{h0}{null hypothesis value}
 
