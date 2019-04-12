@@ -16,4 +16,8 @@ test_that("showChiSq.Test runs error-free",{
   expect_warning(object = showChiSq.Test(x = c(1,2,1), y= c(1,2,2)), regexp =  c("approximation", "geom_vline"))
 })
 
+test_that("showProp.Test runs error-free",{
+  expect_warning(object = showProp.Test(3, 10), regexp =  NA)
+})
+
 

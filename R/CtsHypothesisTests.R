@@ -21,6 +21,13 @@ mcDNorm <- function(x, mean = 0, sd = 1, log = FALSE, ...){
   return(dnorm(x, mean, sd, log))
 }
 
+mcDT <- function(x, df, ...){
+  return(dt(x, df))
+}
+
+mcDF <- function(x, df1, df2, ...){
+  return(df(x, df1, df2))
+}
 
 #' @title Used to shade in a PDF
 #' @description Returns density with extreme event region having NAs
@@ -45,7 +52,10 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #' @param densFun function that computes appropriate density
 #' @param xlims  x limits of the graph to be used. This is passed to ggplot
 #' @param degFree degrees of freedom when only one is needed. This gets passed into densFun
+#' @param verbose if verbose > 0 the resulting graph is printed
 #' @param ... extra arguments passed to density function
+#' @param degFree1 first degrees of freedom parameter when more than one is needed
+#' @param degFree2 second degrees of freedom parameter when more than one is needed
 #'
 #' @return results of call testFun
 #'
@@ -57,7 +67,8 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #' showT.Test(x)
 #'
 #' @export
-showXtremeEventsCts <- function(testStat, densFun, degFree, xlims, ...){
+showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFree1 = NULL,
+                                degFree2 = NULL, xlims, verbose = 1, ...){
   # print(...)
 
   fakeData <- data.frame(x = c(-testStat, testStat),
@@ -65,7 +76,9 @@ showXtremeEventsCts <- function(testStat, densFun, degFree, xlims, ...){
   # extraArgs <- ...
   plt <- ggplot(fakeData, aes_(x = ~ x)) +
     stat_function(fun = densFun,
-                  args = list(df = degFree)) +
+                  args = list(df = degFree,
+                              df1 = degFree1,
+                              df2 = degFree2)) +
     stat_function(data = data.frame(x = xlims),
                   mapping = aes_(x = ~ x),
                   fun = shadePDFCts,
@@ -73,7 +86,9 @@ showXtremeEventsCts <- function(testStat, densFun, degFree, xlims, ...){
                   fill = "blue",
                   args = list(fun = densFun,
                               testStat = testStat,
-                              df = degFree),
+                              df = degFree,
+                              df1 = degFree1,
+                              df2 = degFree2),
                   n = 500) +
     geom_vline(aes_(xintercept = ~ x,
                     color = ~ Statistic),
@@ -83,8 +98,10 @@ showXtremeEventsCts <- function(testStat, densFun, degFree, xlims, ...){
     theme_bw() +
     labs(x = "Test Statistic",
          y = "Density",
-         title = "Result of T-Test")
-  print(plt)
+         title = paste("Result of", testID))
+  if(verbose > 0){
+    print(plt)
+  }
   return(plt)
 }
 
@@ -113,10 +130,11 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 
   xlimVal <- max(abs(testStat) + 1, 3)
 
   if(verbose > 0){
-    showXtremeEventsCts(testStat = testStat,
-                     densFun = dt,
-                     xlims = c(-xlimVal, xlimVal),
-                     degFree = degFree)
+    showXtremeEventsCts(testID = "T-Test",
+                        testStat = testStat,
+                        densFun = mcDT,
+                        xlims = c(-xlimVal, xlimVal),
+                        degFree = degFree)
   }
   return(testResult)
 }
@@ -144,11 +162,49 @@ showChiSq.Test <- function(x, y = NULL, p = rep(1/length(x), length(x)),
   xlims <- c(0, max(qchisq(0.99, degFree), testStat + 1))
 
   if(verbose > 0){
-    showXtremeEventsCts(testStat = testStat,
+    showXtremeEventsCts(testID = "Chi-Sq. Test",
+                        testStat = testStat,
                         densFun = dchisq,
                         xlims = xlims,
                         degFree = degFree)
   }
   return(testResult)
+}
 
+#' @title Show results of ANOVA
+#' @description Visualization of distributional results of ANOVA. Please see \link[stats]{aov} for more
+#' information on parameters
+#' @param formula formula specifying a model.
+#' @param data data on which to perform ANOVA
+#' @param verbose if verbose > 0 the resulting graph is printed
+#' @param ... Arguments passed to lm. See \link[stats]{aov} for more detail
+#'
+#' @return output of call to \link[stats]{aov}
+#' @export
+#'
+showANOVA <- function(formula, data = NULL, verbose = 1, ...){
+  anovaResults <- aov(formula, data, ...)
+  resultsTable <- summary(anovaResults)[[1]]
+  degFree2 <- resultsTable$Df[dim(resultsTable)[1]]
+  nInputs <- (dim(resultsTable)[1]-1)
+  inputNames <- rownames(resultsTable)
+  if(verbose > 0){
+    pltList <- NULL
+    for(i in 1:nInputs){
+      degFree1 <- resultsTable$Df[i]
+      testStat <- resultsTable$`F value`[i]
+      xlims <- c(0, max(qf(0.99, degFree1, degFree2), testStat + 1))
+      pltList[[i]] <- showXtremeEventsCts(testID = paste("ANOVA:", inputNames[i]),
+                                     testStat = resultsTable$`F value`[i],
+                                     densFun = mcDF,
+                                     xlims = xlims,
+                                     degFree1 = degFree1,
+                                     degFree2 = degFree2,
+                                     verbose = 0)
+
+    }
+    # grid.arrange(pltList)
+    do.call(grid.arrange, c(pltList, ncol = floor(sqrt(nInputs))))
+
+  }
 }
