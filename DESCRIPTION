@@ -10,6 +10,7 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports: ggplot2,
     ggthemes,
+    gridExtra,
     magrittr,
     stats
 Suggests: testthat

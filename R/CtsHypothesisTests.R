@@ -56,6 +56,7 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #' @param ... extra arguments passed to density function
 #' @param degFree1 first degrees of freedom parameter when more than one is needed
 #' @param degFree2 second degrees of freedom parameter when more than one is needed
+#' @param testID name of hypothesis test
 #'
 #' @return results of call testFun
 #'
@@ -174,6 +175,7 @@ showChiSq.Test <- function(x, y = NULL, p = rep(1/length(x), length(x)),
 #' @title Show results of ANOVA
 #' @description Visualization of distributional results of ANOVA. Please see \link[stats]{aov} for more
 #' information on parameters
+#' @import gridExtra
 #' @param formula formula specifying a model.
 #' @param data data on which to perform ANOVA
 #' @param verbose if verbose > 0 the resulting graph is printed

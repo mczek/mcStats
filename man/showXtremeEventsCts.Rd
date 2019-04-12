@@ -8,6 +8,8 @@ showXtremeEventsCts(testID, testStat, densFun, degFree = NULL,
   degFree1 = NULL, degFree2 = NULL, xlims, verbose = 1, ...)
 }
 \arguments{
+\item{testID}{name of hypothesis test}
+
 \item{testStat}{test statistic}
 
 \item{densFun}{function that computes appropriate density}
