@@ -22,3 +22,6 @@ output of call to \link[stats]{aov}
 Visualization of distributional results of ANOVA. Please see \link[stats]{aov} for more
 information on parameters
 }
+\examples{
+showANOVA(yield ~  N + P + K, npk)
+}

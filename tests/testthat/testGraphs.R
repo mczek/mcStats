@@ -1,3 +1,5 @@
+context("testGraphs.R")
+
 test_that("mcDNorm",{
   expect_equal(mcDNorm(0), 0.3989423, tolerance = 0.000001)
   expect_equal(mcDNorm(c(1,2,3)), c(0.241970725, 0.053990967, 0.004431848), tolerance = 0.000001)
@@ -13,11 +15,16 @@ test_that("showProp.Test runs error-free",{
 })
 
 test_that("showChiSq.Test runs error-free",{
-  expect_warning(object = showChiSq.Test(x = c(1,2,1), y= c(1,2,2)), regexp =  c("approximation", "geom_vline"))
+  expect_warning(object = showChiSq.Test(x = c(1,2,1), y= c(1,2,2)), regexp =  "approximation")
 })
 
 test_that("showProp.Test runs error-free",{
   expect_warning(object = showProp.Test(3, 10), regexp =  NA)
 })
+
+test_that("showANOVA runs error-free",{
+  expect_warning(object = showANOVA(yield ~  N + P + K, npk), regexp =  "geom_vline")
+})
+
 
 

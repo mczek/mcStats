@@ -29,6 +29,10 @@ mcDF <- function(x, df1, df2, ...){
   return(df(x, df1, df2))
 }
 
+mcDChiSq <- function(x, df, ...){
+  return(dchisq(x, df))
+}
+
 #' @title Used to shade in a PDF
 #' @description Returns density with extreme event region having NAs
 #'
@@ -84,7 +88,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
                   mapping = aes_(x = ~ x),
                   fun = shadePDFCts,
                   geom = "area",
-                  fill = "blue",
+                  fill = "#56B4E9",
                   args = list(fun = densFun,
                               testStat = testStat,
                               df = degFree,
@@ -165,7 +169,7 @@ showChiSq.Test <- function(x, y = NULL, p = rep(1/length(x), length(x)),
   if(verbose > 0){
     showXtremeEventsCts(testID = "Chi-Sq. Test",
                         testStat = testStat,
-                        densFun = dchisq,
+                        densFun = mcDChiSq,
                         xlims = xlims,
                         degFree = degFree)
   }
@@ -183,7 +187,8 @@ showChiSq.Test <- function(x, y = NULL, p = rep(1/length(x), length(x)),
 #'
 #' @return output of call to \link[stats]{aov}
 #' @export
-#'
+#' @examples
+#' showANOVA(yield ~  N + P + K, npk)
 showANOVA <- function(formula, data = NULL, verbose = 1, ...){
   anovaResults <- aov(formula, data, ...)
   resultsTable <- summary(anovaResults)[[1]]
