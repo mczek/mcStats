@@ -23,7 +23,11 @@ test_that("showProp.Test runs error-free",{
 })
 
 test_that("showANOVA runs error-free",{
-  expect_warning(object = showANOVA(yield ~  N + P + K, npk), regexp =  "geom_vline")
+  expect_warning(object = showANOVA(yield ~  N + P + K + block + block:P, npk), regexp =  "geom_vline")
+})
+
+test_that("showOLS runs error-free",{
+  expect_warning(object = showOLS(mpg ~ cyl  + qsec, mtcars), regexp =  NA)
 })
 
 

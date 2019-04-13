@@ -21,8 +21,8 @@ mcDNorm <- function(x, mean = 0, sd = 1, log = FALSE, ...){
   return(dnorm(x, mean, sd, log))
 }
 
-mcDT <- function(x, df, ...){
-  return(dt(x, df))
+mcDT <- function(x, degFree, ...){
+  return(dt(x, df = degFree))
 }
 
 mcDF <- function(x, df1, df2, ...){
@@ -81,7 +81,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
   # extraArgs <- ...
   plt <- ggplot(fakeData, aes_(x = ~ x)) +
     stat_function(fun = densFun,
-                  args = list(df = degFree,
+                  args = list(degFree = degFree,
                               df1 = degFree1,
                               df2 = degFree2)) +
     stat_function(data = data.frame(x = xlims),
@@ -91,7 +91,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
                   fill = "#56B4E9",
                   args = list(fun = densFun,
                               testStat = testStat,
-                              df = degFree,
+                              degFree = degFree,
                               df1 = degFree1,
                               df2 = degFree2),
                   n = 500) +
@@ -202,12 +202,38 @@ showANOVA <- function(formula, data = NULL, verbose = 1, ...){
       testStat <- resultsTable$`F value`[i]
       xlims <- c(0, max(qf(0.99, degFree1, degFree2), testStat + 1))
       pltList[[i]] <- showXtremeEventsCts(testID = paste("ANOVA:", inputNames[i]),
-                                     testStat = resultsTable$`F value`[i],
+                                     testStat = testStat,
                                      densFun = mcDF,
                                      xlims = xlims,
                                      degFree1 = degFree1,
                                      degFree2 = degFree2,
                                      verbose = 0)
+
+    }
+    # grid.arrange(pltList)
+    do.call(grid.arrange, c(pltList, ncol = floor(sqrt(nInputs))))
+
+  }
+}
+
+showOLS <- function(formula, data, verbose = 1){
+  modelResults <- lm(formula = formula, data = data)
+  resultsTable <- summary(modelResults)[[4]]
+  nInputs <- dim(resultsTable)[1]-1
+  inputNames <- rownames(resultsTable)
+  degFree <- nrow(data) - length(inputNames)
+  if(verbose > 0){
+    pltList <- NULL
+    for(i in 1:nInputs){
+      testStat <- resultsTable[i,3]
+      xlimVal <- max(abs(testStat) + 1, 3)
+      xlims <- c(0, max(mcDT(0.99, degFree = degFree), testStat + 1))
+      pltList[[i]] <- showXtremeEventsCts(testID = paste("OLS:", inputNames[i]),
+                                          testStat = testStat,
+                                          densFun = mcDT,
+                                          xlims = c(-xlimVal, xlimVal),
+                                          degFree = degFree,
+                                          verbose = 0)
 
     }
     # grid.arrange(pltList)
