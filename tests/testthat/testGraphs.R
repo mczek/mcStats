@@ -15,7 +15,7 @@ test_that("showProp.Test runs error-free",{
 })
 
 test_that("showChiSq.Test runs error-free",{
-  expect_warning(object = showChiSq.Test(x = c(1,2,1), y= c(1,2,2)), regexp =  "approximation")
+  expect_warning(object = showChiSq.Test(x = c(100,200,100), y= c(100,200,200)), regexp =  "approximation")
 })
 
 test_that("showProp.Test runs error-free",{
@@ -23,7 +23,7 @@ test_that("showProp.Test runs error-free",{
 })
 
 test_that("showANOVA runs error-free",{
-  expect_warning(object = showANOVA(yield ~  N + P + K + block + block:P, npk), regexp =  "geom_vline")
+  expect_warning(object = showANOVA(yield ~  N + P + K + block + block:P, npk), regexp =  NA)
 })
 
 test_that("showOLS runs error-free",{

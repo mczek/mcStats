@@ -25,12 +25,12 @@ mcDT <- function(x, degFree, ...){
   return(dt(x, df = degFree))
 }
 
-mcDF <- function(x, df1, df2, ...){
-  return(df(x, df1, df2))
+mcDF <- function(x, degFree1, degFree2, ...){
+  return(df(x, df1 = degFree1, df2 = degFree2))
 }
 
-mcDChiSq <- function(x, df, ...){
-  return(dchisq(x, df))
+mcDChiSq <- function(x, degFree, ...){
+  return(dchisq(x, df = degFree))
 }
 
 #' @title Used to shade in a PDF
@@ -74,16 +74,20 @@ shadePDFCts <- function(x, fun, testStat, ...){
 #' @export
 showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFree1 = NULL,
                                 degFree2 = NULL, xlims, verbose = 1, ...){
-  # print(...)
 
-  fakeData <- data.frame(x = c(-testStat, testStat),
-                         Statistic = c("Equally Extreme Event", "Your Test Statistic"))
-  # extraArgs <- ...
+  if(xlims[1] == 0){
+    fakeData <- data.frame(x = c(0, testStat),
+                           Statistic = c("Lower Bound", "Your Test Statistic"))
+  } else {
+    fakeData <- data.frame(x = c(-testStat, testStat),
+                           Statistic = c("Equally Extreme Event", "Your Test Statistic"))
+  }
+
   plt <- ggplot(fakeData, aes_(x = ~ x)) +
     stat_function(fun = densFun,
                   args = list(degFree = degFree,
-                              df1 = degFree1,
-                              df2 = degFree2)) +
+                              degFree1 = degFree1,
+                              degFree2 = degFree2)) +
     stat_function(data = data.frame(x = xlims),
                   mapping = aes_(x = ~ x),
                   fun = shadePDFCts,
@@ -92,8 +96,8 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
                   args = list(fun = densFun,
                               testStat = testStat,
                               degFree = degFree,
-                              df1 = degFree1,
-                              df2 = degFree2),
+                              degFree1 = degFree1,
+                              degFree2 = degFree2),
                   n = 500) +
     geom_vline(aes_(xintercept = ~ x,
                     color = ~ Statistic),
@@ -202,12 +206,12 @@ showANOVA <- function(formula, data = NULL, verbose = 1, ...){
       testStat <- resultsTable$`F value`[i]
       xlims <- c(0, max(qf(0.99, degFree1, degFree2), testStat + 1))
       pltList[[i]] <- showXtremeEventsCts(testID = paste("ANOVA:", inputNames[i]),
-                                     testStat = testStat,
-                                     densFun = mcDF,
-                                     xlims = xlims,
-                                     degFree1 = degFree1,
-                                     degFree2 = degFree2,
-                                     verbose = 0)
+                                          testStat = testStat,
+                                          densFun = mcDF,
+                                          xlims = xlims,
+                                          degFree1 = degFree1,
+                                          degFree2 = degFree2,
+                                          verbose = 0)
 
     }
     # grid.arrange(pltList)
@@ -216,6 +220,17 @@ showANOVA <- function(formula, data = NULL, verbose = 1, ...){
   }
 }
 
+#' Show hypothesis tests from OLS
+#'
+#' @param formula forumula for regression. Passed to \link[stats]{lm}
+#' @param data data for regression. Passed to \link[stats]{lm}
+#' @param verbose if verbose > 0 the resulting graph is printed
+#'
+#' @return model object resulting from the regression
+#' @export
+#'
+#' @examples
+#' showOLS(mpg ~ cyl + disp, mtcars)
 showOLS <- function(formula, data, verbose = 1){
   modelResults <- lm(formula = formula, data = data)
   resultsTable <- summary(modelResults)[[4]]

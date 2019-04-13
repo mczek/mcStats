@@ -79,3 +79,5 @@ showProp.Test <- function(x, n, p = 0.5){
 
 
 
+
+

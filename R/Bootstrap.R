@@ -69,7 +69,7 @@ bootstrap <- function(fun, data, h0, nreps, conf.level = 0.95, verbose = 1){
                       color = "Sim. Mean")) +
       scale_color_manual(name = "Value",
                          values = c("Null Hypothesis" = "#E69F00",
-                                    "Sim. Mean" = "black")) +
+                                    "Sim. Mean" = "#CC79A7")) +
 
       # geom_vline(xintercept = confLines,
       #            color = "#56B4E9") +
