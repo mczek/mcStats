@@ -64,19 +64,17 @@ bootstrap <- function(fun, data, h0, nreps, conf.level = 0.95, verbose = 1){
                                    "More Extreme Event" = "#56B4E9")) +
       theme_bw() +
       geom_vline(aes_(xintercept = ~ h0,
-                      color = "Null Hypothesis")) +
+                      color = "Null Hypothesis"),
+                 size = 3) +
       geom_vline(aes_(xintercept = ~ meanStat,
-                      color = "Sim. Mean")) +
+                      color = "Sim. Mean"),
+                 size = 3) +
       scale_color_manual(name = "Value",
                          values = c("Null Hypothesis" = "#E69F00",
                                     "Sim. Mean" = "#CC79A7")) +
-
-      # geom_vline(xintercept = confLines,
-      #            color = "#56B4E9") +
       labs(x = "Statistic",
            y = "Count",
            title = paste("Results of Boostrapping", nreps, "Times"))
-      # geom_vline(xintercept = confLines)
     print(plt)
   }
   return(results)

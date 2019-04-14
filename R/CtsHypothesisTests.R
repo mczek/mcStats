@@ -212,9 +212,7 @@ showANOVA <- function(formula, data = NULL, verbose = 1, ...){
                                           degFree1 = degFree1,
                                           degFree2 = degFree2,
                                           verbose = 0)
-
     }
-    # grid.arrange(pltList)
     do.call(grid.arrange, c(pltList, ncol = floor(sqrt(nInputs))))
 
   }
@@ -234,7 +232,7 @@ showANOVA <- function(formula, data = NULL, verbose = 1, ...){
 showOLS <- function(formula, data, verbose = 1){
   modelResults <- lm(formula = formula, data = data)
   resultsTable <- summary(modelResults)[[4]]
-  nInputs <- dim(resultsTable)[1]-1
+  nInputs <- dim(resultsTable)[1]
   inputNames <- rownames(resultsTable)
   degFree <- nrow(data) - length(inputNames)
   if(verbose > 0){
@@ -249,10 +247,35 @@ showOLS <- function(formula, data, verbose = 1){
                                           xlims = c(-xlimVal, xlimVal),
                                           degFree = degFree,
                                           verbose = 0)
-
     }
-    # grid.arrange(pltList)
     do.call(grid.arrange, c(pltList, ncol = floor(sqrt(nInputs))))
 
   }
+}
+
+#' @title Visualize results of McNemar's Test
+#' @description relevant parameters are passed to \link[stats]{mcnemar.test}
+#'
+#' @param x two dimensional contingency table as a matrix or a factor object
+#' @param y factor object, ignored if x is a matrix
+#' @param correct logical indicating whether or not to perform continuity correction
+#' @param verbose if verbose > 0 the resulting graph is printed
+#'
+#' @return results of call to \link[stats]{mcnemar.test}
+#' @export
+#'
+showMcNemarTest <- function(x, y = NULL, correct = TRUE, verbose = 1){
+  testResult <- mcnemar.test(x = x, y = y, correct = correct)
+  testStat <- testResult$statistic
+  degFree <- testResult$parameter
+  xlims <- c(0, max(qchisq(0.99, degFree), testStat + 1))
+
+  if(verbose > 0){
+    showXtremeEventsCts(testID = "McNemar's Test",
+                        testStat = testStat,
+                        densFun = mcDChiSq,
+                        xlims = xlims,
+                        degFree = degFree)
+  }
+  return(testResult)
 }
