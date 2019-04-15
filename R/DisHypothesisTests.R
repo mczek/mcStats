@@ -19,6 +19,7 @@ labelDisPDF <- function(x, obsVal, expVal){
 
 #' Show Extreme Events from a Discrete Distribution
 #'
+#' @param testID name of test being performed. This is used to title the graph
 #' @param obsVal observed x value
 #' @param expVal expected x value
 #' @param xVals domain of x (possible values)
@@ -29,8 +30,8 @@ labelDisPDF <- function(x, obsVal, expVal){
 #' @export
 #'
 #' @examples
-#' showXtremeEventsDis(3, 5, 0:10, probFun = dbinom, size = 10, prob = 0.5)
-showXtremeEventsDis <- function(obsVal, expVal, xVals, probFun, ...){
+#' showXtremeEventsDis("Prop. Test", 3, 5, 0:10, probFun = dbinom, size = 10, prob = 0.5)
+showXtremeEventsDis <- function(testID, obsVal, expVal, xVals, probFun, ...){
   fakeData <- data.frame(x = xVals,
                          Probability = probFun(xVals, ...),
                          Event = labelDisPDF(xVals,
@@ -48,7 +49,7 @@ showXtremeEventsDis <- function(obsVal, expVal, xVals, probFun, ...){
                                  "Less Extreme Event" = "#FFFFFF")) +
     labs(x = "X",
          y = "Probability",
-         title = "Results of Proportion Test")
+         title = paste("Results of", testID))
   print(plt)
   return(plt)
 }
@@ -68,7 +69,8 @@ showXtremeEventsDis <- function(obsVal, expVal, xVals, probFun, ...){
 showProp.Test <- function(x, n, p = 0.5){
   testResult <- binom.test(x, n, p)
   obsVal <- testResult$statistic
-  showXtremeEventsDis(obsVal = obsVal,
+  showXtremeEventsDis(testID = "Proportion Test",
+                      obsVal = obsVal,
                       expVal = n*p,
                       xVals = 0:n,
                       probFun = dbinom,
@@ -77,6 +79,79 @@ showProp.Test <- function(x, n, p = 0.5){
   return(testResult)
 }
 
+wilcoxonProb <- function(x, n, k){
+  #computes P_n(X = x)
+  if(x < k){
+    return(0)
+  }
+  nums2SelectFrom <- min(n,x)
+  subsets <- utils::combn(1:nums2SelectFrom, k)
+  count <- 0
+  nSubsets <- choose(nums2SelectFrom,k)
+  for(i in 1:nSubsets){
+    s <- subsets[,i]
+    count <- count + (sum(s) == x)
+  }
+  return(count/choose(n,k))
+}
+
+mcDWilcox <- function(x, n, k){
+  return(sapply(x, wilcoxonProb, n = n, k = k))
+}
+
+#' Visualize Results of a Wilcoxon Rank Sum Test
+#'
+#' @param cat1 vector of measurements for group 1
+#' @param cat2 vector of measurements for group 2
+#'
+#' @return list containing p-value and test statistic
+#' @export
+#'
+
+showWilcoxon.Test <- function(cat1, cat2){
+  #assume values are unique
+  x <- c(cat1, cat2)
+  x <- sort(x)
+  N <- length(x)
+  sumRank1<- sumRank2 <- 0
+
+  for (i in 1:N){
+    if(x[i] %in% cat1){
+      sumRank1 <- sumRank1 + i
+    } else{
+      sumRank2 <- sumRank2 + i
+    }
+  }
+
+  testStat <- sumRank2
+  k <- length(cat2)
+  if(sumRank1 >= sumRank2){
+    testStat <- sumRank1
+    k <- length(cat1)
+  }
+
+  probs <- NULL
+  for (i in 0:(N*k)){
+    probs[i+1] <- mcDWilcox(i, N, k)
+  }
+
+  ExpVal <- k*(N+1)/2
+
+  p <- sum(probs[labelDisPDF(0:(N*k), testStat, ExpVal) != "Less Extreme Event"])
+
+  showXtremeEventsDis(testID = "Wilcoxon Rank Sum Test",
+                      testStat,
+                      expVal = ExpVal,
+                      xVals = (sum(1:k)):(sum((N-k+1):N)),
+                      probFun = mcDWilcox,
+                      n = N,
+                      k = k)
+
+  print(paste("p-value:", p))
+  result <- list(statistic = testStat,
+                 p.value = p)
+  return(result)
+}
 
 
 

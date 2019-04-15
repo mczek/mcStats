@@ -4,9 +4,11 @@
 \alias{showXtremeEventsDis}
 \title{Show Extreme Events from a Discrete Distribution}
 \usage{
-showXtremeEventsDis(obsVal, expVal, xVals, probFun, ...)
+showXtremeEventsDis(testID, obsVal, expVal, xVals, probFun, ...)
 }
 \arguments{
+\item{testID}{name of test being performed. This is used to title the graph}
+
 \item{obsVal}{observed x value}
 
 \item{expVal}{expected x value}
@@ -24,5 +26,5 @@ graph coloring events by how extreme they are under the null hypothesis
 Show Extreme Events from a Discrete Distribution
 }
 \examples{
-showXtremeEventsDis(3, 5, 0:10, probFun = dbinom, size = 10, prob = 0.5)
+showXtremeEventsDis("Prop. Test", 3, 5, 0:10, probFun = dbinom, size = 10, prob = 0.5)
 }
