@@ -21,14 +21,45 @@ mcDNorm <- function(x, mean = 0, sd = 1, log = FALSE, ...){
   return(dnorm(x, mean, sd, log))
 }
 
+#' Density of t-distribution
+#'
+#' @importFrom stats dt
+#' @param x x value
+#' @param degFree degrees of freedom
+#' @param ... optional additional parameters which are ignored
+#'
+#' @return density of given t-dist. at x
+#' @export
+#'
 mcDT <- function(x, degFree, ...){
   return(dt(x, df = degFree))
 }
 
+#' Density of F-distribution
+#'
+#' @importFrom stats df
+#' @param x x value
+#' @param degFree1 degrees of freedom 1
+#' @param degFree2 degrees of freedom 2
+#' @param ... optional additional parameters which are ignored
+#'
+#' @return density of given F-dist. at x
+#' @export
+#'
 mcDF <- function(x, degFree1, degFree2, ...){
   return(df(x, df1 = degFree1, df2 = degFree2))
 }
 
+#' Density of Chi-Square distribution
+#'
+#' @importFrom stats dchisq
+#' @param x x value
+#' @param degFree degrees of freedom
+#' @param ... optional additional parameters which are ignored
+#'
+#' @return density of given Chi-Square dist. at x
+#' @export
+#'
 mcDChiSq <- function(x, degFree, ...){
   return(dchisq(x, df = degFree))
 }
@@ -125,7 +156,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
 #'
 #' @return results of call to t.test
 #'
-#' @import ggplot2 stats ggthemes
+#' @import ggplot2 ggthemes
 #' @examples
 #' x <- rnorm(100)
 #' showT.Test(x, verbose = 0)
@@ -147,6 +178,110 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 
   }
   return(testResult)
 }
+
+#' Mosaic Plot
+#'
+#' @param x must be a matrix with each row and column labelled
+#' @import magrittr
+#' @importFrom tidyr expand
+#' @importFrom  dplyr right_join filter_ mutate
+#' @return mosaic plot showing observed proportions, colored by residuals from chi-sq. test
+#' @export
+#' @examples
+#' x <- matrix(runif(9,5,100), ncol = 3, dimnames = list(c("Yes1", "No1", "Maybe1"),
+#' c("Yes2", "No2", "Maybe2")))
+#' mosaicplot(x)
+mosaicplot <- function(x){
+  if(is.null(rownames(x)) | is.null(colnames(x))){
+    warning("Row and Columns must be named.")
+    return()
+  }
+  cond <- sweep(x,2,colSums(x),`/`)
+
+  var1CDF <- rowSums(x)/sum(x)
+  var2CDF <- colSums(x)/sum(x)
+
+  df <- expand(data.frame(), rownames(x), colnames(x)) %>%
+    as.data.frame()
+  names(df)<-c("Var1", "Var2")
+
+
+  xStart <- 0
+  var2df <- data.frame()
+  for(i in 1:dim(x)[2]){
+    var2df <- rbind(var2df, data.frame("Var2" = colnames(x)[i],
+                                       "xStart" = xStart,
+                                       "xEnd" = xStart + var2CDF[i]))
+    xStart <- xStart + var2CDF[i]
+  }
+
+  totalDF <- data.frame()
+  for(v2 in colnames(x)){
+    yTop <- 1
+    for(v1 in rownames(x)){
+      temp <- data.frame("Var1" = v1,
+                         "Var2" = v2,
+                         "yEnd" = yTop,
+                         "yStart" = yTop - cond[v1, v2])
+      yTop <- yTop - cond[v1, v2]
+      totalDF <- rbind(totalDF, temp)
+    }
+  }
+
+  df <- right_join(totalDF, var2df)
+
+  a <- chisq.test(x)
+
+  a$residuals
+
+
+  resData <- a$residuals
+  resData <- resData %>%
+    as.table() %>%
+    as.data.frame()
+
+  names(resData)[3] <- "Residual"
+
+  xdf <- x %>%
+    as.table() %>%
+    as.data.frame()
+
+  resData <- right_join(df, resData)
+
+  labelDF1 <- resData %>%
+    filter_(~Var2 == colnames(x)[1]) %>%
+    mutate(yMean = (yStart + yEnd)/2)
+
+  labelDF2 <- resData %>%
+    filter_(~Var1 == rownames(x)[1]) %>%
+    mutate(xMean = (xStart + xEnd)/2)
+
+  plt <- resData %>%
+    ggplot() +
+    geom_rect(aes_(xmin = ~xStart,
+                  xmax = ~xEnd,
+                  ymin = ~yStart,
+                  ymax = ~yEnd,
+                  fill = ~Residual),
+              color = "white") +
+    geom_text(labelDF1,
+              mapping = aes_(y = ~yMean,
+                            label = ~Var1),
+              x = -.05,
+              angle = 90) +
+    geom_text(labelDF2,
+              mapping = aes_(x = ~xMean,
+                            label = ~Var2),
+              y = 1.05) +
+    theme_bw() +
+    lims(x = c(-0.05, 1.05), y = c(-0.05, 1.05)) +
+    labs(title = "Mosaic Plot: Residuals of Chi-Square Test",
+         x = "Proportion",
+         y = "Proportion")
+  print(plt)
+  return(plt)
+}
+
 
 #' Show Chi-Square Test
 #' @description show results of a chi-square test visually using \link[stats]{chisq.test}

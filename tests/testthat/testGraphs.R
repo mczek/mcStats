@@ -30,5 +30,11 @@ test_that("showOLS runs error-free",{
   expect_warning(object = showOLS(mpg ~ cyl  + qsec, mtcars), regexp =  NA)
 })
 
+test_that("showWilcoxonTest runs error-free",{
+  expect_warning(object = {x <- c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91, 1.64, 0.73, 1.46)
+  y <- c(1.15, 0.88, 0.90, 0.74, 1.21)
+  showWilcoxon.Test(x,y)}, regexp =  NA)
+})
+
 
 

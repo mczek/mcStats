@@ -4,7 +4,8 @@
 \alias{showT.Test}
 \title{Conduct z-test}
 \usage{
-showT.Test(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 1)
+showT.Test(group1, group2 = NULL, mu = 0, paired = FALSE,
+  verbose = 1)
 }
 \arguments{
 \item{group1}{continuous data to test}
