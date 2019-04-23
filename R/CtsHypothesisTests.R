@@ -184,14 +184,14 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 
 #' @param x must be a matrix with each row and column labelled
 #' @import magrittr
 #' @importFrom tidyr expand
-#' @importFrom  dplyr right_join filter_ mutate
+#' @importFrom  dplyr right_join filter_ mutate_
 #' @return mosaic plot showing observed proportions, colored by residuals from chi-sq. test
 #' @export
 #' @examples
 #' x <- matrix(runif(9,5,100), ncol = 3, dimnames = list(c("Yes1", "No1", "Maybe1"),
 #' c("Yes2", "No2", "Maybe2")))
 #' mosaicplot(x)
-mosaicplot <- function(x){
+showMosaicPlot <- function(x){
   if(is.null(rownames(x)) | is.null(colnames(x))){
     warning("Row and Columns must be named.")
     return()
@@ -250,11 +250,11 @@ mosaicplot <- function(x){
 
   labelDF1 <- resData %>%
     filter_(~Var2 == colnames(x)[1]) %>%
-    mutate(yMean = (yStart + yEnd)/2)
+    mutate_(yMean = (~yStart + ~yEnd)/2)
 
   labelDF2 <- resData %>%
     filter_(~Var1 == rownames(x)[1]) %>%
-    mutate(xMean = (xStart + xEnd)/2)
+    mutate_(xMean = (~xStart + ~xEnd)/2)
 
   plt <- resData %>%
     ggplot() +
