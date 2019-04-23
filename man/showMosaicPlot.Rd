@@ -18,5 +18,5 @@ Mosaic Plot
 \examples{
 x <- matrix(runif(9,5,100), ncol = 3, dimnames = list(c("Yes1", "No1", "Maybe1"),
 c("Yes2", "No2", "Maybe2")))
-mosaicplot(x)
+showMosaicPlot(x)
 }
