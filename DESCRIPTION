@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(person("Michael", "Czekanski", email = "mczekanski@middlebury.edu", role = c("aut", "cre")), person("Alex", "Lyford", email = "alyford@middlebury.edu", role = "aut"))
 Description: Provides functionality to produce graphs of sampling distributions of test 	statistics from a variety of common statistical tests. With only a few keystrokes, 	the user can conduct a hypothesis test and visualize the test statistic and 		corresponding p-value through the shading of its sampling distribution. Initially       	created for statistics at Middlebury College.
 Depends: R (>= 3.4.3)
-License: What license is it under?
+License: GPL-3 
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
