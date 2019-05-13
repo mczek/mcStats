@@ -232,7 +232,7 @@ showMosaicPlot <- function(x){
 
   a <- chisq.test(x)
 
-  a$residuals
+  a$stdres
 
 
   resData <- a$residuals
@@ -270,11 +270,12 @@ showMosaicPlot <- function(x){
               mapping = aes_(y = ~yMean,
                             label = ~Var1),
               x = -.05,
-              angle = 90) +
+              angle = 45) +
     geom_text(labelDF2,
               mapping = aes_(x = ~xMean,
                             label = ~Var2),
-              y = 1.05) +
+              y = 1.05,
+              angle = 45) +
     theme_bw() +
     lims(x = c(-0.05, 1.05), y = c(-0.05, 1.05)) +
     labs(title = "Mosaic Plot: Residuals of Chi-Square Test",
