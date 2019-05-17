@@ -53,7 +53,7 @@ showT.Test(x)
     ##  mean of x 
     ## -0.2830035
 
-Test with nullhypothesis mean = 0.5.
+Test with null hypothesis mean = 0.5.
 
 ``` r
 showT.Test(x, mu = 0.5)
