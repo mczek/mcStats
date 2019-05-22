@@ -3,7 +3,7 @@
 export(bootstrap)
 export(hello)
 export(labelBootResults)
-export(labelDisPDF)
+export(labelPDFDis)
 export(mcDChiSq)
 export(mcDF)
 export(mcDNorm)

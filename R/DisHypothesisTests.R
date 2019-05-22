@@ -8,8 +8,8 @@
 #' @export
 #'
 #' @examples
-#' labelDisPDF(0:10, 3, 5)
-labelDisPDF <- function(x, obsVal, expVal){
+#' labelPDFDis(0:10, 3, 5)
+labelPDFDis <- function(x, obsVal, expVal){
   y <- rep(x = "More Extreme Event", length(x))
   y[abs(x - expVal) < abs(obsVal - expVal)] <- "Less Extreme Event"
   y[x == obsVal] <- "Observed Event"
@@ -34,7 +34,7 @@ labelDisPDF <- function(x, obsVal, expVal){
 showXtremeEventsDis <- function(testID, obsVal, expVal, xVals, probFun, ...){
   fakeData <- data.frame(x = xVals,
                          Probability = probFun(xVals, ...),
-                         Event = labelDisPDF(xVals,
+                         Event = labelPDFDis(xVals,
                                              obsVal,
                                              expVal))
 
