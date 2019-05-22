@@ -14,5 +14,7 @@ Imports: dplyr,
     ggthemes,
     gridExtra,
     magrittr,
+    rlang,
+    stats,
     tidyr
 Suggests: testthat
