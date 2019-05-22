@@ -79,21 +79,5 @@ showProp.Test <- function(x, n, p = 0.5){
   return(testResult)
 }
 
-wilcoxonProb <- function(x, n, k){
-  #computes P_n(X = x)
-  if(x < k){
-    return(0)
-  }
-  nums2SelectFrom <- min(n,x)
-  subsets <- utils::combn(1:nums2SelectFrom, k)
-  count <- 0
-  nSubsets <- choose(nums2SelectFrom,k)
-  for(i in 1:nSubsets){
-    s <- subsets[,i]
-    count <- count + (sum(s) == x)
-  }
-  return(count/choose(n,k))
-}
-
 
 
