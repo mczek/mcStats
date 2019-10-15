@@ -389,6 +389,7 @@ showOLS <- function(formula, data, verbose = 1){
     do.call(grid.arrange, c(pltList, ncol = floor(sqrt(nInputs))))
 
   }
+  return(modelResults)
 }
 
 #' @title Visualize results of McNemar's Test
