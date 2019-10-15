@@ -8,8 +8,8 @@
 #' @export
 #'
 #' @examples
-#' labelDisPDF(0:10, 3, 5)
-labelDisPDF <- function(x, obsVal, expVal){
+#' labelPDFDis(0:10, 3, 5)
+labelPDFDis <- function(x, obsVal, expVal){
   y <- rep(x = "More Extreme Event", length(x))
   y[abs(x - expVal) < abs(obsVal - expVal)] <- "Less Extreme Event"
   y[x == obsVal] <- "Observed Event"
@@ -34,7 +34,7 @@ labelDisPDF <- function(x, obsVal, expVal){
 showXtremeEventsDis <- function(testID, obsVal, expVal, xVals, probFun, ...){
   fakeData <- data.frame(x = xVals,
                          Probability = probFun(xVals, ...),
-                         Event = labelDisPDF(xVals,
+                         Event = labelPDFDis(xVals,
                                              obsVal,
                                              expVal))
 
@@ -77,22 +77,6 @@ showProp.Test <- function(x, n, p = 0.5){
                       size = n,
                       prob = p)
   return(testResult)
-}
-
-wilcoxonProb <- function(x, n, k){
-  #computes P_n(X = x)
-  if(x < k){
-    return(0)
-  }
-  nums2SelectFrom <- min(n,x)
-  subsets <- utils::combn(1:nums2SelectFrom, k)
-  count <- 0
-  nSubsets <- choose(nums2SelectFrom,k)
-  for(i in 1:nSubsets){
-    s <- subsets[,i]
-    count <- count + (sum(s) == x)
-  }
-  return(count/choose(n,k))
 }
 
 

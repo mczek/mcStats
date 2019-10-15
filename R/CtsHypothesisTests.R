@@ -10,6 +10,7 @@ hello <- function(){
 
 #' @title dnorm but with more arguments
 #' @description compute density of normal distribution while allowing for more arguments which are ignored
+#' @importFrom stats dnorm
 #' @param x x value
 #' @param mean mean of normal distribution
 #' @param sd std. dev. of noraml distribution
@@ -184,7 +185,8 @@ showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 
 #' @param x must be a matrix with each row and column labelled
 #' @import magrittr
 #' @importFrom tidyr expand
-#' @importFrom  dplyr right_join filter_
+#' @importFrom  dplyr right_join
+#' @importFrom rlang .data
 #' @return mosaic plot showing observed proportions, colored by residuals from chi-sq. test
 #' @export
 #' @examples
@@ -232,10 +234,9 @@ showMosaicPlot <- function(x){
 
   a <- chisq.test(x)
 
-  a$stdres
 
 
-  resData <- a$residuals
+  resData <- a$stdres
   resData <- resData %>%
     as.table() %>%
     as.data.frame()
@@ -249,12 +250,12 @@ showMosaicPlot <- function(x){
   resData <- right_join(df, resData)
 
   labelDF1 <- resData %>%
-    filter_(~Var2 == colnames(x)[1])
+    dplyr::filter(.data$Var2 == colnames(x)[1])
 
   labelDF1$yMean <- (labelDF1$yStart + labelDF1$yEnd)/2
 
   labelDF2 <- resData %>%
-    filter_(~Var1 == rownames(x)[1])
+    dplyr::filter(.data$Var1 == rownames(x)[1])
 
   labelDF2$xMean <- (labelDF2$xStart + labelDF2$xEnd)/2
 
@@ -280,7 +281,8 @@ showMosaicPlot <- function(x){
     lims(x = c(-0.05, 1.05), y = c(-0.05, 1.05)) +
     labs(title = "Mosaic Plot: Residuals of Chi-Square Test",
          x = "Proportion",
-         y = "Proportion")
+         y = "Proportion") +
+    scale_fill_gradient2(low = "red", high = "blue", mid = "white", midpoint = 0, na.value = "gray", limits = c(-15,15))
   print(plt)
   return(plt)
 }
