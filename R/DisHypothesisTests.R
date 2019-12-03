@@ -42,7 +42,7 @@ showXtremeEventsDis <- function(testID, obsVal, expVal, xVals, probFun, ...){
     geom_bar(mapping = aes_(fill = ~ Event),
              stat = "identity",
              color = "black") +
-    theme_bw() +
+    theme_classic() +
     scale_fill_manual(values = c("Observed Event" = "#E69F00",
                                  "Equally Extreme Event" = "#000000",
                                  "More Extreme Event" = "#56B4E9",
