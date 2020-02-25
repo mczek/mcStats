@@ -4,3 +4,4 @@
 ^\.git$
 ^\.gitignore$
 ^CRAN-RELEASE$
+^cran-comments\.md$
