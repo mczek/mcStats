@@ -153,6 +153,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
 #' @param mu optional: mean to test against for one-sample t-test
 #' @param paired boolean, if TRUE perform matched pairs t-test
 #' @param verbose default is 1 which will create a graph. To turn this off use verbose = 0.
+#' @param conf.level confidence level - passed to t.test
 #'
 #' @return results of call to t.test
 #'
@@ -163,8 +164,8 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
 #' showT.Test(x)
 #'
 #' @export
-showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 1){
-  testResult <- t.test(group1, group2, mu = mu)
+showT.Test <- function(group1, group2 = NULL, mu = 0, paired = FALSE, conf.level = 0.9, verbose = 1){
+  testResult <- t.test(group1, group2, mu = mu, conf.level = conf.level)
   testStat <- testResult$statistic
   degFree <- testResult$parameter
   xlimVal <- max(abs(testStat) + 1, 3)

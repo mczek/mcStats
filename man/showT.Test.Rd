@@ -4,7 +4,14 @@
 \alias{showT.Test}
 \title{Conduct z-test}
 \usage{
-showT.Test(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 1)
+showT.Test(
+  group1,
+  group2 = NULL,
+  mu = 0,
+  paired = FALSE,
+  conf.level = 0.9,
+  verbose = 1
+)
 }
 \arguments{
 \item{group1}{continuous data to test}
@@ -14,6 +21,8 @@ showT.Test(group1, group2 = NULL, mu = 0, paired = FALSE, verbose = 1)
 \item{mu}{optional: mean to test against for one-sample t-test}
 
 \item{paired}{boolean, if TRUE perform matched pairs t-test}
+
+\item{conf.level}{confidence level - passed to t.test}
 
 \item{verbose}{default is 1 which will create a graph. To turn this off use verbose = 0.}
 }
