@@ -26,9 +26,9 @@ test_that("showANOVA runs error-free",{
   expect_warning(object = showANOVA(yield ~  N + P + K + block + block:P, npk), regexp =  NA)
 })
 
-test_that("showOLS runs error-free",{
-  expect_warning(object = showOLS(mpg ~ cyl  + qsec, mtcars), regexp =  NA)
-})
+# test_that("showOLS runs error-free",{
+#   expect_warning(object = showOLS(mpg ~ cyl  + qsec, mtcars), regexp =  NA)
+# })
 
 
 

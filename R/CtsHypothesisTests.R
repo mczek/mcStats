@@ -76,7 +76,7 @@ mcDChiSq <- function(x, degFree, ...){
 #' @export
 shadePDFCts <- function(x, fun, testStat, ...){
   y <- fun(x,...)
-  y[abs(x) < abs(testStat)] <- NA
+  y[abs(x) < abs(testStat)] <- 0
   return(y)
 }
 
@@ -128,7 +128,7 @@ showXtremeEventsCts <- function(testID, testStat, densFun, degFree = NULL, degFr
                               degFree = degFree,
                               degFree1 = degFree1,
                               degFree2 = degFree2),
-                  n = 500) +
+                  xlim = xlims) +
     scale_fill_manual("Events", values = c("#FFFFFF", "#56B4E9")) +
     geom_vline(aes_(xintercept = ~ x,
                     color = ~ Statistic),

@@ -3,7 +3,7 @@ mcStats
 <!-- badges: start -->
 ![CRAN status](https://www.r-pkg.org/badges/version-ago/mcStats)
 ![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/mcStats)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 <!-- badges: end -->
 
 ================

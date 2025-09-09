@@ -1,3 +1,6 @@
+# mcStats 0.1.3
+* Minor change to avoid ggplot warning
+
 # mcStats 0.1.2
 * Update arguments to stat_function to account for ggplot changes
 
